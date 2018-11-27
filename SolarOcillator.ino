@@ -29,10 +29,10 @@ void loop(){
     //delay(1000);
     //begrenser antall omganger den vil kjøre til 3.
     if(quadCounter <= 8 ){
-      	searchPattern();
+      	searchPattern(5);
     }
 	else{
-		
+		searchPattern(3);
 	}
 }
 
