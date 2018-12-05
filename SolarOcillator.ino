@@ -1,3 +1,4 @@
+#include <SolarOcillatorLights.h>
 include<Servo.h>
 
 //ett servoobjekt per servo
@@ -140,6 +141,35 @@ void movePattern(int serv1, int serv2, int speed){
       rotasjonen før målingen tas. kan vi f.eks måle når motorene 
       slutter å gå og hente data fra panelet da?*/
 }
+
+
+
+void lightPattern(int panelValue){
+	/*
+	Lager et objekt kalt Lights med funksjoner for tre lyssettinger. Disse
+kalles etter verdien på lysVerdi variablen. 	
+	Sudokode lysstyring:
+	
+	if(panelValue < 500){
+		SolarOcillatorLights.setLow();
+	}else if(panelValue < 700){
+		SolarOcillatorLights.setMedium();
+	}else if(panelValue >= 700){
+		SolarOcillatorLights.setHigh();
+	}
+	
+
+*/
+
+}
+
+
+
+
+
+
+
+
 
 
 
