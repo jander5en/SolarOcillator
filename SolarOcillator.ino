@@ -1,13 +1,10 @@
 #include <SolarOcillatorLights.h>
-include<Servo.h>
+#include <Servo.h>
 
 //ett servoobjekt per servo
 Servo myServo1;
 Servo myServo2;
 int lysverdi = A0;
-int maxVal = 0;
-int sensorValue = 0;
-
 
 //Verdien som gir utgangspunt til sektorene 
 const int radius = 90;
@@ -20,31 +17,31 @@ void setup(){
     //definer signal pin for servo objektene
     myServo1.attach(3);
     myServo2.attach(9);
+	lightsInit();
     //sette opp serial 
     Serial.begin(9600);
     //roterer motorene til utgangsposisjon
-    movePattern(origo[0],origo[1], speed);
+    movePattern(origo[0],origo[1], 5);
 }
 
 void loop(){
-    //delay(1000);
-    //begrenser antall omganger den vil kjøre til 3.
     if(quadCounter <= 8 ){
       	searchPattern(5);
     }
 	else{
 		searchPattern(3);
 	}
+	lightPattern(analogRead(lysverdi));
 }
 
 void searchPattern(int speed){
     /*Søker etter høyeste effekt fra sensor,
       Juster posisjon, registrer verdier fra sensor, 
-      evaluer og juster origo hvis høyere verdi finnes
-
-     */
-    int patternResult[4];
-    //setter opp variabelen som brukes til å gi verdier relativ til origo
+      evaluer og juster origo hvis høyere verdi finnes     */
+    
+	int patternResult[4];
+    
+	//setter opp variabelen som brukes til å gi verdier relativ til origo
     int modulatorlissom = floor(radius/quadCounter);
 
     //Roter motorene relativt til origo og mål effekten i punktene
@@ -61,8 +58,8 @@ void searchPattern(int speed){
     patternResult[3] = analogRead(lysverdi); 
 
     //Finn den av posisjonene som hadde den høyeste verdien
-    maxVal = 0;
-    sensorValue = 0;
+    int maxVal = 0;
+    int sensorValue = 0;
     for(int i = 0; i<4;i++){
         if(patternResult[i] > sensorValue){
             maxVal = i + 1;          
@@ -76,40 +73,31 @@ void searchPattern(int speed){
         	origo[0] = origo[0] + modulatorlissom;
         	origo[1] = origo[1] + modulatorlissom;
         	movePattern(origo[0],origo[1], speed);
-        	//Serial.println("Case 1");
       		break;
 
         case 2:
         	origo[0] = origo[0] + modulatorlissom;
         	origo[1] = origo[1] - modulatorlissom;
         	movePattern(origo[0],origo[1], speed);
-        	//Serial.println("Case 2");
       		break;
 
         case 3:
         	origo[0] = origo[0] - modulatorlissom;
         	origo[1] = origo[1] - modulatorlissom;
         	movePattern(origo[0],origo[1], speed);
-        	//Serial.println("Case 3");
       		break;
 
         case 4:
         	origo[0] = origo[0] - modulatorlissom;
         	origo[1] = origo[1] + modulatorlissom;
         	movePattern(origo[0],origo[1], speed);
-        	//Serial.println("Case 4");
       		break;
 
         default:
         	//Hvis det ikke finnes en bedre verdi, returner til utgangsposisjon
-        	//Serial.print("Ingen ny origo. Origo i: ");
-        	//Serial.println(origo[0]);
-        	//Serial.println(origo[1]);
         	movePattern(origo[0],origo[1], speed);
       		break;
     }
-    //Serial.println(origo[0]);
-    //Serial.println(origo[1]);
   	modulatorlissom = 0;
   	quadCounter = quadCounter + 1;
 }
@@ -141,36 +129,5 @@ void movePattern(int serv1, int serv2, int speed){
       rotasjonen før målingen tas. kan vi f.eks måle når motorene 
       slutter å gå og hente data fra panelet da?*/
 }
-
-
-
-void lightPattern(int panelValue){
-	/*
-	Lager et objekt kalt Lights med funksjoner for tre lyssettinger. Disse
-kalles etter verdien på lysVerdi variablen. 	
-	Sudokode lysstyring:
-	
-	if(panelValue < 500){
-		SolarOcillatorLights.setLow();
-	}else if(panelValue < 700){
-		SolarOcillatorLights.setMedium();
-	}else if(panelValue >= 700){
-		SolarOcillatorLights.setHigh();
-	}
-	
-
-*/
-
-}
-
-
-
-
-
-
-
-
-
-
 
 
